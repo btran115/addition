@@ -3,8 +3,12 @@ import tensorflow as tf
 import random
 import matplotlib.pyplot as plt 
 
+#train_data, test_data will look like [train(test)_size, 12*24]
+#labels will have 6*30 instead of 12*24
 train_data = []
 train_labels = []
+test_data = []
+test_labels = []
 
 def digit_to_pixel(n):
 	if n==0: 
@@ -52,10 +56,21 @@ def gen_add(n,m):
 
 def gen_data(n):
 	for i in range(n):
-		x = random.randint(0,10000)
-		y = random.randint(0,10000)
+		x = random.randint(0,9999)
+		y = random.randint(0,9999)
 		z = x+y
-		train_data.append(np.asarray(gen_add(x,y)))
-		train_labels.append(np.asarray(gen_num(z, True)))
+		train_data.append(np.asarray(gen_add(x,y), dtype = np.float32).flatten())
+		train_labels.append(np.asarray(gen_num(z, True), dtype = np.float32).flatten())
+	for i in range(n/10):
+		x = random.randint(0,9999)
+		y = random.randint(0,9999)
+		z = x+y
+		test_data.append(np.asarray(gen_add(x,y), dtype = np.float32).flatten())
+		test_labels.append(np.asarray(gen_num(z, True), dtype = np.float32).flatten())
+data_size = 100000
+gen_data(data_size)
 
-gen_data(10000)
+train_data = np.asarray(train_data)
+train_labels = np.asarray(train_labels)
+test_data = np.asarray(test_data)
+test_labels = np.asarray(test_labels)
